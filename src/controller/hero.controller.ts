@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body } from '@nestjs/common';
 import { HeroService } from 'service/hero.service';
 import { ResponseDto } from 'dto/response.dto';
+import { HeroDto } from 'dto/hero.dto';
 
 @Controller('hero')
 export class HeroController {
@@ -29,6 +30,14 @@ export class HeroController {
   getByOrigin(@Param('origin') origin: string): ResponseDto {
     return {
       data: this.heroService.getByOrigin(origin),
+      success: true,
+    };
+  }
+
+  @Post()
+  create(@Body() heroDto: HeroDto): ResponseDto {
+    return {
+      data: this.heroService.create(heroDto),
       success: true,
     };
   }
