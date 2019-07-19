@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-import { HeroService } from 'service/hero.service';
+import { HeroService } from 'services/hero.service';
 import { ResponseDto } from 'dto/response.dto';
 import { HeroDto } from 'dto/hero.dto';
 
