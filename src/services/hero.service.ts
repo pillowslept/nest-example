@@ -1,37 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Hero } from 'interfaces/hero.interface';
 import { HeroDto } from 'dto';
+import { HEROES } from 'utils/constants/base-heroes';
+import { RaceService } from 'services/race.service';
+import { HERO_DOEST_EXIST } from 'utils/constants/messages';
 
 @Injectable()
 export class HeroService {
 
-  private HEROES: Hero[] = [
-    { name: 'Thor', origin: 'Asgard' },
-    { name: 'Hulk', origin: 'Earth' },
-    { name: 'Iron Man', origin: 'Earth' },
-    { name: 'Black Widow', origin: 'Earth' },
-    { name: 'Loki', origin: 'Asgard' },
-  ];
+  constructor(
+    private raceService: RaceService,
+  ) {
+  }
 
   getAll(): Hero[] {
-    return this.HEROES;
+    return HEROES;
   }
 
   getByName(heroName: string): Hero {
     return this.filterByName(heroName);
   }
 
-  getByOrigin(heroOrigin: string): Hero[] {
-    return this.HEROES.filter(({ origin }) => origin.toLowerCase() === heroOrigin.toLowerCase());
+  getByRace(heroRace: string): Hero[] {
+    return HEROES.filter(({ race: { name } }) => name.toLowerCase() === heroRace.toLowerCase());
   }
 
   create(heroDto: HeroDto): Hero {
-    this.HEROES.push({ name: heroDto.name, origin: heroDto.origin });
+    const race = this.raceService.getByName(heroDto.race);
+    HEROES.push({ name: heroDto.name, race });
     return this.filterByName(heroDto.name);
   }
 
   private filterByName(heroName: string) {
-    return this.HEROES.find(({ name }) => name.toLowerCase() === heroName.toLowerCase());
+    const hero = HEROES.find(({ name }) => name.toLowerCase() === heroName.toLowerCase());
+
+    if (!hero) {
+      throw new NotFoundException(HERO_DOEST_EXIST);
+    }
+
+    return hero;
   }
 
 }

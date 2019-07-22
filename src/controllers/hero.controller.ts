@@ -26,10 +26,10 @@ export class HeroController {
     };
   }
 
-  @Get('origin/:origin')
-  getByOrigin(@Param('origin') origin: string): ResponseDto {
+  @Get('race/:race')
+  getByRace(@Param('race') race: string): ResponseDto {
     return {
-      data: this.heroService.getByOrigin(origin),
+      data: this.heroService.getByRace(race),
       success: true,
     };
   }
