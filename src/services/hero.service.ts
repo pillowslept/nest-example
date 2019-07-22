@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Hero } from 'interfaces/hero.interface';
-import { HeroDto } from 'dto/hero.dto';
+import { HeroDto } from 'dto';
 
 @Injectable()
 export class HeroService {
@@ -18,7 +18,7 @@ export class HeroService {
   }
 
   getByName(heroName: string): Hero {
-    return this.HEROES.find(({ name }) => name.toLowerCase() === heroName.toLowerCase());
+    return this.filterByName(heroName);
   }
 
   getByOrigin(heroOrigin: string): Hero[] {
@@ -27,7 +27,11 @@ export class HeroService {
 
   create(heroDto: HeroDto): Hero {
     this.HEROES.push({ name: heroDto.name, origin: heroDto.origin });
-    return this.HEROES.find(({ name }) => name.toLowerCase() === heroDto.name.toLowerCase());
+    return this.filterByName(heroDto.name);
+  }
+
+  private filterByName(heroName: string) {
+    return this.HEROES.find(({ name }) => name.toLowerCase() === heroName.toLowerCase());
   }
 
 }
