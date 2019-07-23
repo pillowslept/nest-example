@@ -1,4 +1,4 @@
-import { Hero, Race } from 'interfaces';
+import { Hero, Race, Team } from 'interfaces';
 
 const HUMAN: Race = { name: 'Human', population: 10000 };
 const KREE: Race = { name: 'Kree', population: 1500 };
@@ -22,4 +22,9 @@ export const HEROES: Hero[] = [
   { name: 'Loki', race: ASGARDIANS },
   { name: 'Talos', race: SKRULLS },
   { name: 'Warbringer', race: CHITAURI },
+];
+
+export const TEAMS: Team[] = [
+  { name: 'Avengers' },
+  { name: 'Guardians of the Galaxy' },
 ];

@@ -1,8 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { HeroController } from 'controllers/hero.controller';
-import { HeroService } from 'services/hero.service';
+import { HeroController } from 'controllers';
+import { HeroService, RaceService } from 'services';
 import { LoggerMiddleware } from 'middlewares/logger.middleware';
-import { RaceService } from 'services/race.service';
 
 @Module({
   controllers: [HeroController],

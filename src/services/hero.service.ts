@@ -1,14 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Hero } from 'interfaces/hero.interface';
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
+import { Hero } from 'interfaces';
 import { HeroDto } from 'dto';
 import { HEROES } from 'utils/constants/base-heroes';
-import { RaceService } from 'services/race.service';
+import { RaceService } from 'services';
 import { HERO_DOEST_EXIST } from 'utils/constants/messages';
 
 @Injectable()
 export class HeroService {
 
   constructor(
+    @Inject(forwardRef(() => RaceService))
     private raceService: RaceService,
   ) {
   }

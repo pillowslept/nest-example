@@ -1,37 +1,28 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-import { RaceService } from 'services/race.service';
-import { ResponseDto } from 'dto/response.dto';
-import { RaceDto } from 'dto';
+import { Controller, Get, Post, Param, Body, Inject, forwardRef } from '@nestjs/common';
+import { RaceService } from 'services';
+import { ResponseDto, RaceDto } from 'dto';
 
 @Controller('race')
 export class RaceController {
 
   constructor(
+    @Inject(forwardRef(() => RaceService))
     private readonly raceService: RaceService,
   ) {}
 
   @Get()
   getAll(): ResponseDto {
-    return {
-      data: this.raceService.getAll(),
-      success: true,
-    };
+    return new ResponseDto(this.raceService.getAll());
   }
 
   @Get('/:name')
   getByName(@Param('name') name: string): ResponseDto {
-    return {
-      data: this.raceService.getByName(name),
-      success: true,
-    };
+    return new ResponseDto(this.raceService.getByName(name));
   }
 
   @Post()
   create(@Body() raceDto: RaceDto): ResponseDto {
-    return {
-      data: this.raceService.create(raceDto),
-      success: true,
-    };
+    return new ResponseDto(this.raceService.create(raceDto));
   }
 
 }

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Race } from 'interfaces/race.interface';
+import { Race } from 'interfaces';
 import { RaceDto } from 'dto';
 import { RACES } from 'utils/constants/base-heroes';
 import { RACE_DOEST_EXIST } from 'utils/constants/messages';

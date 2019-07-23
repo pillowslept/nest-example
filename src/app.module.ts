@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { HeroModule } from 'modules/hero.module';
-import { RaceModule } from 'modules/race.module';
+import { HeroModule, RaceModule, TeamModule } from 'modules';
 
 @Module({
-  imports: [HeroModule, RaceModule],
+  imports: [HeroModule, RaceModule, TeamModule],
 })
 export class AppModule { }

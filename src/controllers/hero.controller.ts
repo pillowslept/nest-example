@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-import { HeroService } from 'services/hero.service';
-import { ResponseDto } from 'dto/response.dto';
-import { HeroDto } from 'dto';
+import { HeroService } from 'services';
+import { ResponseDto, HeroDto } from 'dto';
 
 @Controller('hero')
 export class HeroController {
@@ -12,34 +11,22 @@ export class HeroController {
 
   @Get()
   getAll(): ResponseDto {
-    return {
-      data: this.heroService.getAll(),
-      success: true,
-    };
+    return new ResponseDto(this.heroService.getAll());
   }
 
   @Get('/:name')
   getByName(@Param('name') name: string): ResponseDto {
-    return {
-      data: this.heroService.getByName(name),
-      success: true,
-    };
+    return new ResponseDto(this.heroService.getByName(name));
   }
 
   @Get('race/:race')
   getByRace(@Param('race') race: string): ResponseDto {
-    return {
-      data: this.heroService.getByRace(race),
-      success: true,
-    };
+    return new ResponseDto(this.heroService.getByRace(race));
   }
 
   @Post()
   create(@Body() heroDto: HeroDto): ResponseDto {
-    return {
-      data: this.heroService.create(heroDto),
-      success: true,
-    };
+    return new ResponseDto(this.heroService.create(heroDto));
   }
 
 }

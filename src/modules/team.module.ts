@@ -1,16 +1,16 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { RaceController } from 'controllers';
-import { RaceService } from 'services';
+import { TeamController } from 'controllers';
+import { TeamService } from 'services';
 import { LoggerMiddleware } from 'middlewares/logger.middleware';
 
 @Module({
-  controllers: [RaceController],
-  providers: [RaceService],
+  controllers: [TeamController],
+  providers: [TeamService],
 })
-export class RaceModule implements NestModule {
+export class TeamModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes(RaceController);
+      .forRoutes(TeamController);
   }
 }
