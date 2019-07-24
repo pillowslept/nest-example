@@ -1,45 +1,45 @@
-import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
-import { Hero } from 'interfaces';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { HeroDto } from 'dto';
-import { HEROES } from 'utils/constants/base-heroes';
-import { RaceService } from 'services';
 import { HERO_DOEST_EXIST } from 'utils/constants/messages';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { HeroEntity } from 'entities/hero.entity';
 
 @Injectable()
 export class HeroService {
 
   constructor(
-    @Inject(forwardRef(() => RaceService))
-    private raceService: RaceService,
+    @InjectRepository(HeroEntity)
+    private heroRepository: Repository<HeroEntity>,
   ) {
   }
 
-  getAll(): Hero[] {
-    return HEROES;
+  async getAll(): Promise<HeroEntity[]> {
+    return await this.heroRepository.find();
   }
 
-  getByName(heroName: string): Hero {
-    return this.filterByName(heroName);
+  async getById(id: number): Promise<HeroEntity> {
+    const hero = await this.heroRepository.findOne({ where: { id }});
+    return this.validateExistence(hero);
   }
 
-  getByRace(heroRace: string): Hero[] {
-    return HEROES.filter(({ race: { name } }) => name.toLowerCase() === heroRace.toLowerCase());
+  async getByName(name: string): Promise<HeroEntity> {
+    const hero = await this.heroRepository.findOne({ where: { name }});
+    return this.validateExistence(hero);
   }
 
-  create(heroDto: HeroDto): Hero {
-    const race = this.raceService.getByName(heroDto.race);
-    HEROES.push({ name: heroDto.name, race });
-    return this.filterByName(heroDto.name);
+  async create(heroDto: HeroDto): Promise<HeroEntity> {
+    const hero = await this.heroRepository.create(heroDto);
+    await this.heroRepository.save(hero);
+    return hero;
   }
 
-  private filterByName(heroName: string) {
-    const hero = HEROES.find(({ name }) => name.toLowerCase() === heroName.toLowerCase());
-
-    if (!hero) {
+  private validateExistence(heroEntity: HeroEntity): HeroEntity {
+    if (!heroEntity) {
       throw new NotFoundException(HERO_DOEST_EXIST);
     }
 
-    return hero;
+    return heroEntity;
   }
 
 }

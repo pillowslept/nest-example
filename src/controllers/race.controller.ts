@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Param, Body, Inject, forwardRef } from '@nestjs/common';
 import { RaceService } from 'services';
-import { ResponseDto, RaceDto } from 'dto';
+import { RaceDto } from 'dto';
 
 @Controller('race')
 export class RaceController {
@@ -11,18 +11,23 @@ export class RaceController {
   ) {}
 
   @Get()
-  getAll(): ResponseDto {
-    return new ResponseDto(this.raceService.getAll());
+  getAll() {
+    return this.raceService.getAll();
   }
 
-  @Get('/:name')
-  getByName(@Param('name') name: string): ResponseDto {
-    return new ResponseDto(this.raceService.getByName(name));
+  @Get('/:id')
+  getById(@Param('id') id: number) {
+    return this.raceService.getById(id);
+  }
+
+  @Get('/name/:name')
+  getByName(@Param('name') name: string) {
+    return this.raceService.getByName(name);
   }
 
   @Post()
-  create(@Body() raceDto: RaceDto): ResponseDto {
-    return new ResponseDto(this.raceService.create(raceDto));
+  create(@Body() raceDto: RaceDto) {
+    return this.raceService.create(raceDto);
   }
 
 }

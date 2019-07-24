@@ -1,33 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Race } from 'interfaces';
 import { RaceDto } from 'dto';
-import { RACES } from 'utils/constants/base-heroes';
 import { RACE_DOEST_EXIST } from 'utils/constants/messages';
+import { Repository } from 'typeorm';
+import { RaceEntity } from 'entities/race.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class RaceService {
 
-  getAll(): Race[] {
-    return RACES;
+  constructor(
+    @InjectRepository(RaceEntity)
+    private raceRepository: Repository<RaceEntity>,
+  ) {
   }
 
-  getByName(raceName: string): Race {
-    return this.filterByName(raceName);
+  async getAll(): Promise<RaceEntity[]> {
+    return await this.raceRepository.find();
   }
 
-  create(raceDto: RaceDto): Race {
-    RACES.push({ name: raceDto.name, population: raceDto.population });
-    return this.filterByName(raceDto.name);
+  async getById(id: number): Promise<RaceEntity> {
+    const race = await this.raceRepository.findOne({ where: { id }});
+    return this.validateExistence(race);
   }
 
-  private filterByName(raceName: string) {
-    const race =  RACES.find(({ name }) => name.toLowerCase() === raceName.toLowerCase());
+  async getByName(name: string): Promise<RaceEntity> {
+    const race = await this.raceRepository.findOne({ where: { name }});
+    return this.validateExistence(race);
+  }
 
-    if (!race) {
+  async create(raceDto: RaceDto): Promise<RaceEntity> {
+    const race = await this.raceRepository.create(raceDto);
+    await this.raceRepository.save(race);
+    return race;
+  }
+
+  private validateExistence(raceEntity: RaceEntity): RaceEntity {
+    if (!raceEntity) {
       throw new NotFoundException(RACE_DOEST_EXIST);
     }
 
-    return race;
+    return raceEntity;
   }
 
 }

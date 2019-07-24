@@ -1,33 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Team } from 'interfaces';
 import { TeamDto } from 'dto';
-import { TEAMS } from 'utils/constants/base-heroes';
 import { TEAM_DOEST_EXIST } from 'utils/constants/messages';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TeamEntity } from 'entities/team.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TeamService {
 
-  getAll(): Team[] {
-    return TEAMS;
+  constructor(
+    @InjectRepository(TeamEntity)
+    private teamRepository: Repository<TeamEntity>,
+  ) {
   }
 
-  getByName(raceName: string): Team {
-    return this.filterByName(raceName);
+  async getAll(): Promise<TeamEntity[]> {
+    return await this.teamRepository.find();
   }
 
-  create(teamDto: TeamDto): Team {
-    TEAMS.push({ name: teamDto.name });
-    return this.filterByName(teamDto.name);
+  async getById(id: number): Promise<TeamEntity> {
+    const team = await this.teamRepository.findOne({ where: { id }});
+    return this.validateExistence(team);
   }
 
-  private filterByName(teamName: string) {
-    const team =  TEAMS.find(({ name }) => name.toLowerCase() === teamName.toLowerCase());
+  async getByName(name: string): Promise<TeamEntity> {
+    const team = await this.teamRepository.findOne({ where: { name }});
+    return this.validateExistence(team);
+  }
 
-    if (!team) {
+  async create(teamDto: TeamDto): Promise<TeamEntity> {
+    const hero = await this.teamRepository.create(teamDto);
+    await this.teamRepository.save(hero);
+    return hero;
+  }
+
+  private validateExistence(teamEntity: TeamEntity): TeamEntity {
+    if (!teamEntity) {
       throw new NotFoundException(TEAM_DOEST_EXIST);
     }
 
-    return team;
+    return teamEntity;
   }
 
 }
