@@ -4,6 +4,7 @@ import { HERO_DOEST_EXIST } from 'utils/constants/messages';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HeroEntity } from 'entities/hero.entity';
+import { RaceService } from './race.service';
 
 @Injectable()
 export class HeroService {
@@ -11,6 +12,7 @@ export class HeroService {
   constructor(
     @InjectRepository(HeroEntity)
     private heroRepository: Repository<HeroEntity>,
+    private readonly raceService: RaceService,
   ) {
   }
 

@@ -4,9 +4,10 @@ import { HeroService } from 'services';
 import { LoggerMiddleware } from 'middlewares/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HeroEntity } from 'entities/hero.entity';
+import { RaceModule } from './race.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([HeroEntity])],
+  imports: [TypeOrmModule.forFeature([HeroEntity]), RaceModule],
   controllers: [HeroController],
   providers: [HeroService],
 })

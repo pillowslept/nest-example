@@ -9,6 +9,7 @@ import { RaceEntity } from 'entities/race.entity';
   imports: [TypeOrmModule.forFeature([RaceEntity])],
   controllers: [RaceController],
   providers: [RaceService],
+  exports: [RaceService],
 })
 export class RaceModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
