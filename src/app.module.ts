@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { HeroModule, RaceModule, TeamModule } from 'modules';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { TransformInterceptor } from 'interceptors/transform.interceptor';
+import { TransformInterceptor } from 'shared/interceptors/transform.interceptor';
+import { RaceModule } from 'race/race.module';
+import { TeamModule } from 'team/team.module';
+import { HeroModule } from 'hero/hero.module';
 
 @Module({
-  imports: [HeroModule, RaceModule, TeamModule, TypeOrmModule.forRoot()],
+  imports: [TypeOrmModule.forRoot(), HeroModule, RaceModule, TeamModule],
   providers: [
     {
       provide: APP_INTERCEPTOR,

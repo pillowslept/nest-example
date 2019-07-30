@@ -1,12 +1,11 @@
-import { Controller, Get, Post, Param, Body, Inject, forwardRef } from '@nestjs/common';
-import { RaceService } from 'services';
-import { RaceDto } from 'dto';
+import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import { RaceService } from './race.service';
+import { RaceDto } from './race.dto';
 
 @Controller('race')
 export class RaceController {
 
   constructor(
-    @Inject(forwardRef(() => RaceService))
     private readonly raceService: RaceService,
   ) {}
 

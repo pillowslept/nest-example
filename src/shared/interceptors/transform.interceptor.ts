@@ -1,7 +1,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ResponseDto } from 'dto';
+import { ResponseDto } from 'shared/dto/response.dto';
 
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<T, ResponseDto> {

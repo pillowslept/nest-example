@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TeamDto } from 'dto';
-import { TEAM_DOEST_EXIST } from 'utils/constants/messages';
+import { TeamDto } from './team.dto';
+import { TEAM_DOEST_EXIST } from 'shared/constants/messages';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TeamEntity } from 'entities/team.entity';
+import { TeamEntity } from './team.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -20,11 +20,13 @@ export class TeamService {
 
   async getById(id: number): Promise<TeamEntity> {
     const team = await this.teamRepository.findOne({ where: { id }});
+
     return this.validateExistence(team);
   }
 
   async getByName(name: string): Promise<TeamEntity> {
     const team = await this.teamRepository.findOne({ where: { name }});
+
     return this.validateExistence(team);
   }
 

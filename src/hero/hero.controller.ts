@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
-import { HeroService } from 'services';
-import { HeroDto } from 'dto';
+import { Controller, Get, Post, Param, Body, Put } from '@nestjs/common';
+import { HeroService } from './hero.service';
+import { HeroDto } from './hero.dto';
 
 @Controller('hero')
 export class HeroController {
@@ -14,7 +14,7 @@ export class HeroController {
     return this.heroService.getAll();
   }
 
-  @Get('/:id')
+  @Get(':id')
   getById(@Param('id') id: number) {
     return this.heroService.getById(id);
   }
@@ -27,6 +27,11 @@ export class HeroController {
   @Post()
   create(@Body() heroDto: HeroDto) {
     return this.heroService.create(heroDto);
+  }
+
+  @Put(':id/teams')
+  relateTeam(@Param('id') id: number, @Body() heroDto: HeroDto) {
+    return this.heroService.relateTeam(id, heroDto);
   }
 
 }
